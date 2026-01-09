@@ -5,7 +5,6 @@ from sqlalchemy.orm import validates
 db = SQLAlchemy()
 
 class Episode(db.Model):
-    """Episode model representing a late show episode."""
     __tablename__ = 'episodes'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -18,7 +17,6 @@ class Episode(db.Model):
     guests = association_proxy('appearances', 'guest')
     
     def to_dict(self, include_appearances=False):
-        """Serialize episode to dictionary."""
         data = {
             'id': self.id,
             'date': self.date,
@@ -35,7 +33,6 @@ class Episode(db.Model):
 
 
 class Guest(db.Model):
-    """Guest model representing a guest on the late show."""
     __tablename__ = 'guests'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -43,12 +40,11 @@ class Guest(db.Model):
     occupation = db.Column(db.String(100), nullable=False)
     
     appearances = db.relationship('Appearance', backref='guest_ref', 
-                                   cascade='all, delete-orphan', lazy=True)
+                                   cascade='all', lazy=True)
     
     episodes = association_proxy('appearances', 'episode')
     
     def to_dict(self):
-        """Serialize guest to dictionary."""
         return {
             'id': self.id,
             'name': self.name,
@@ -60,7 +56,6 @@ class Guest(db.Model):
 
 
 class Appearance(db.Model):
-    """Appearance model representing a guest's appearance on an episode."""
     __tablename__ = 'appearances'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -72,13 +67,11 @@ class Appearance(db.Model):
     
     @validates('rating')
     def validate_rating(self, key, rating):
-        """Validate that rating is between 1 and 5."""
-        if rating < 1 or rating > 5:
+        if not 1 <= rating <= 5:
             raise ValueError("Rating must be between 1 and 5")
         return rating
     
     def to_dict(self, include_nested=True):
-        """Serialize appearance to dictionary."""
         data = {
             'id': self.id,
             'rating': self.rating,
@@ -93,5 +86,7 @@ class Appearance(db.Model):
         return data
     
     def __repr__(self):
-        return f'<Appearance {self.id}: Guest {self.guest_id} on Episode {self.episode_id}>'
+        guest_name = self.guest_ref.name if self.guest_ref else f"Guest {self.guest_id}"
+        episode_info = f"Episode {self.episode_ref.number}" if self.episode_ref else f"Episode {self.episode_id}"
+        return f'<Appearance: {guest_name} on {episode_info}>'
 
