@@ -1,0 +1,200 @@
+{
+	"info": {
+		"_postman_id": "lateshow-api-collection",
+		"name": "Late Show API",
+		"description": "API collection for Late Show Code Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Get All Episodes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/episodes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"episodes"
+					]
+				},
+				"description": "Retrieve all episodes"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Single Episode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/episodes/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"episodes",
+						"1"
+					]
+				},
+				"description": "Retrieve a single episode by ID with its appearances"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Non-existent Episode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/episodes/9999",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"episodes",
+						"9999"
+					]
+				},
+				"description": "Test 404 response for non-existent episode"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Guests",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/guests",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"guests"
+					]
+				},
+				"description": "Retrieve all guests"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Appearance - Success",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rating\": 5,\n\t\"episode_id\": 1,\n\t\"guest_id\": 1\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/appearances",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"appearances"
+					]
+				},
+				"description": "Create a new appearance with valid data"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Appearance - Invalid Rating",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rating\": 6,\n\t\"episode_id\": 1,\n\t\"guest_id\": 1\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/appearances",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"appearances"
+					]
+				},
+				"description": "Test validation error for rating out of range"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Appearance - Missing Episode",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rating\": 5,\n\t\"guest_id\": 1\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/appearances",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"appearances"
+					]
+				},
+				"description": "Test validation error for missing episode_id"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Appearance - Non-existent Episode",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rating\": 5,\n\t\"episode_id\": 9999,\n\t\"guest_id\": 1\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/appearances",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"appearances"
+					]
+				},
+				"description": "Test validation error for non-existent episode"
+			},
+			"response": []
+		}
+	]
+}
+
